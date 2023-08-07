@@ -4,6 +4,7 @@ import {
   addUser,
   getUserByEmail,
   addUserSession,
+  endSession,
   selectUserUrls,
 } from "../repositories/user.repository.js";
 
@@ -47,6 +48,19 @@ async function signIn(req, res) {
   }
 }
 
+async function signOut(req, res) {
+  const user = res.locals.user;
+
+  try {
+    const signOutTry = await endSession(user);
+    if (signOutTry.rowCount === 0) return res.sendStatus(401);
+
+    res.sendStatus(204);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}
+
 async function getUserUrls(req, res) {
   const user = res.locals.user;
   try {
@@ -57,4 +71,4 @@ async function getUserUrls(req, res) {
   }
 }
 
-export { signIn, signUp, getUserUrls };
+export { signIn, signUp, signOut, getUserUrls };

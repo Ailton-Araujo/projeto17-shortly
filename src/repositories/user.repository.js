@@ -25,6 +25,14 @@ async function addUserSession(id, token) {
   ]);
 }
 
+async function endSession(user) {
+  return db.query(
+    `DELETE FROM sessions 
+            WHERE sessions."userId"=$1 `,
+    [user.id]
+  );
+}
+
 async function selectUserUrls(id) {
   return db.query(
     `SELECT users.id, users.name, 
@@ -48,5 +56,6 @@ export {
   getUserByEmail,
   getUserByAll,
   addUserSession,
+  endSession,
   selectUserUrls,
 };
